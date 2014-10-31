@@ -1,0 +1,14 @@
+{
+  "browserify": {
+    "transform": ["coffeeify"]
+  },
+  "devDependencies": {
+    "browserify": "^6.2.0",
+    "coffee-script": "^1.8.0",
+    "coffeeify": "^0.7.0",
+    "feta": "git+https://git@github.com/innoq/feta.git",
+    "gulp": "^3.8.9",
+    "mocha": "^2.0.1",
+    "watchify": "^2.1.0"
+  }
+}
