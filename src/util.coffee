@@ -3,3 +3,10 @@
 # `status` being an integer and `body` being automatically converted to an XML
 # document based on the response's content type
 exports.http = (method, uri, headers, body) ->
+
+exports.indexBy = (prop, items) ->
+	reducer = (memo, item) ->
+		key = item[prop]
+		memo[key] = item
+		return memo
+	return items.reduce(reducer, {})

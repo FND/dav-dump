@@ -1,5 +1,5 @@
 DOMParser = require("xmldom").DOMParser
-Promise = require("promiscuous") # TODO: use native implementation when available
+global.Promise = require("promiscuous") # TODO: use native implementation when available
 util = require("../src/util")
 getFixture = require("./util").getFixture
 
@@ -9,6 +9,23 @@ responses =
 		headers:
 			"Content-Type": 'text/xml; charset="utf-8"'
 		body: getFixture("index.xml")
+	"GET /f%C3%B6%C3%BC": # /föü
+		status: 200
+		headers: {}
+		body: """
+			tags: [aaa, bbb]
+
+			lorem ipsum
+			"""
+	"GET /b%C3%A4%C3%9F": # /bäß
+		status: 200
+		headers: {}
+		body: """
+			priority: high
+
+			dolor
+			sit amet
+			"""
 
 util.http = (method, uri, headers, body) ->
 	new Promise((resolve, reject) ->
@@ -21,7 +38,7 @@ util.http = (method, uri, headers, body) ->
 					body: parse(res.body, res.headers["Content-Type"])
 				})
 			else
-				reject(status: 404, headers: {})
+				reject(status: 404, body: "#{uri} not found")
 		setTimeout(onResponse, 10)
 		return)
 

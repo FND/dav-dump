@@ -11,7 +11,24 @@ describe("store", ->
 				assert.deepEqual(files, ["föü", "bäß"])
 				done()).
 			catch(done)
+		return)
 
+	it("should provide contents indexed by title", (done) ->
+		store = new Store("/")
+		expected =
+			föü:
+				title: "föü",
+				tags: ["aaa", "bbb"]
+				body:"lorem ipsum"
+			bäß:
+				title: "bäß"
+				priority: "high"
+				body: "dolor\nsit amet"
+		store.all().
+			then((tids) ->
+				assert.deepEqual(tids, expected)
+				done()).
+			catch(done)
 		return)
 
 	return)
