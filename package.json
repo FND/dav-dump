@@ -9,6 +9,8 @@
     "feta": "git+https://git@github.com/innoq/feta.git",
     "gulp": "^3.8.9",
     "mocha": "^2.0.1",
-    "watchify": "^2.1.0"
+    "promiscuous": "^0.6.0",
+    "watchify": "^2.1.0",
+    "xmldom": "^0.1.19"
   }
 }
