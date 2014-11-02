@@ -1,6 +1,7 @@
 DAV-Dump
 
 simple WebDAV store for [tiddler](http://tiddlywiki.com/#Tiddlers)-like objects
+(`{ title, body, ... }`)
 
 
 Getting Started

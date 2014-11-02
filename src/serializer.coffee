@@ -1,6 +1,7 @@
 # inspired by TiddlyWeb's text serialization, which uses an RFC 822-style format
 # `tid`s are key-value pairs with two special slots: `title` and `body`
 
+# NB: throws errors for invalid headers
 exports.serialize = (tid) ->
 	headers = []
 	for key, value of tid
@@ -18,3 +19,28 @@ exports.serialize = (tid) ->
 			headers.push(header)
 
 	return headers.concat(["", body]).join("\n")
+
+# NB: throws errors for invalid inputs
+exports.deserialize = (title, txt) ->
+	[headers, body] = part(txt, "\n\n")
+	throw "invalid serialization" if undefined in [headers, body]
+
+	headers = headers.split("\n")
+	body = body.trim()
+
+	tid = {}
+	for line in headers
+		[key, value] = part(line, ": ")
+		throw "invalid serialization" if undefined in [key, value]
+		tid[key] = value
+
+	tid.title = title
+	tid.body = body
+
+	return tid
+
+# split into two parts
+part = (str, delimiter) ->
+	parts = str.split(delimiter)
+	return [] if parts.length < 2
+	return [parts[0], parts[1..].join(delimiter)]

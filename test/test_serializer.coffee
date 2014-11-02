@@ -82,3 +82,65 @@ describe("serialization", ->
 		return)
 
 	return)
+
+describe("deserialization", ->
+	it("should create a tiddler-like object from its text representation", ->
+		try
+			srz.deserialize("Hello World", "")
+			assert(false)
+		catch err
+			assert(err is "invalid serialization")
+
+		try
+			srz.deserialize("Hello World",
+					"""
+					lorem ipsum
+					""")
+			assert(false)
+		catch err
+			assert(err is "invalid serialization")
+
+		try
+			srz.deserialize("Hello World",
+					"""
+					foobar
+
+					lorem ipsum
+					""")
+			assert(false)
+		catch err
+			assert(err is "invalid serialization")
+
+		try
+			srz.deserialize("Hello World",
+					"""
+					foo:
+
+					lorem ipsum
+					""")
+			assert(false)
+		catch err
+			assert(err is "invalid serialization")
+
+		txt = "foo: \n\n..."
+		tid =
+			title: "Hello World"
+			body: "..."
+			foo: ""
+		assert.deepEqual(srz.deserialize("Hello World", txt), tid)
+
+		txt = """
+			priority: häü
+
+			lörem ipsüm
+			dolor ßit ämet
+			"""
+		tid =
+			title: "Hällo Wörld"
+			body: "lörem ipsüm\ndolor ßit ämet"
+			priority: "häü"
+		assert.deepEqual(srz.deserialize("Hällo Wörld", txt), tid)
+
+		return)
+
+	return)
