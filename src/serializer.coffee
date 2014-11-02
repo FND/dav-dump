@@ -1,5 +1,10 @@
 # inspired by TiddlyWeb's text serialization, which uses an RFC 822-style format
 # `tid`s are key-value pairs with two special slots: `title` and `body`
+# values enclosed in square brackets are considered comma-separated lists
+
+delimiters =
+	headers: ": "
+	lists: ", "
 
 # NB: throws errors for invalid headers
 exports.serialize = (tid) ->
@@ -10,10 +15,10 @@ exports.serialize = (tid) ->
 		else if key is "body"
 			body = value
 		else
-			if key.indexOf(":") != -1
-				throw "header keys must not contain colons"
-			value = value.join(", ") if value.join
-			header = [key, value].join(": ")
+			if key.indexOf(delimiters.headers) != -1
+				throw "header keys must not contain colon delimiters"
+			value = "[#{value.join(delimiters.lists)}]" if value.join
+			header = [key, value].join(delimiters.headers)
 			if header.indexOf("\n") != -1 # XXX: what about \r?
 				throw "headers must not contain line breaks"
 			headers.push(header)
@@ -30,8 +35,12 @@ exports.deserialize = (title, txt) ->
 
 	tid = {}
 	for line in headers
-		[key, value] = part(line, ": ")
+		[key, value] = part(line, delimiters.headers)
 		throw "invalid serialization" if undefined in [key, value]
+
+		if value[0] is "[" and value.substr(-1) is "]"
+			value = value[1..value.length-2].split(delimiters.lists)
+
 		tid[key] = value
 
 	tid.title = title
