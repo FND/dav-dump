@@ -38,8 +38,8 @@ exports.deserialize = (title, txt) ->
 		[key, value] = part(line, delimiters.headers)
 		throw "invalid serialization" if undefined in [key, value]
 
-		if value[0] is "[" and value.substr(-1) is "]"
-			value = value[1..value.length-2].split(delimiters.lists)
+		if value[0] is "[" and value[-1..-1] is "]"
+			value = value[1..-2].split(delimiters.lists)
 
 		tid[key] = value
 
