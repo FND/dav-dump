@@ -2,6 +2,7 @@
 
 var gulp = require("gulp");
 var browserify = require("feta/tasks/browserify");
+var fs = require("fs");
 var path = require("path");
 
 var paths = {
@@ -19,3 +20,10 @@ gulp.task("autocompile", function() {
 
 gulp.task("browserify", browserify(paths.csEntry,
 		path.join(paths.distro, paths.js), jsExtensions));
+
+// auto-install Git hooks
+fs.symlink("../../hooks/pre-push", "./.git/hooks/pre-push", function(err) {
+	if(err && err.code !== "EEXIST") {
+		console.error("ERROR creating symlink");
+	}
+});
