@@ -1,10 +1,5 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-# ensure commit is valid
+set -e
+
 make test
-RES=$?
-if [ $RES -ne 0 ]; then
-	exit 1
-fi
-
-exit 0
