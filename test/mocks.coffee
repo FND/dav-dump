@@ -11,7 +11,6 @@ responses =
 		body: getFixture("index.xml")
 	"GET /f%C3%B6%C3%BC": # /föü
 		status: 200
-		headers: {}
 		body: """
 			tags: [aaa, bbb]
 
@@ -19,7 +18,6 @@ responses =
 			"""
 	"GET /b%C3%A4%C3%9F": # /bäß
 		status: 200
-		headers: {}
 		body: """
 			priority: high
 
@@ -28,17 +26,17 @@ responses =
 			"""
 	"PUT /s%C3%A4mple": # /sämple
 		status: 204
-		headers: {}
 
 util.http = (method, uri, headers, body) ->
 	new Promise((resolve, reject) ->
 		onResponse = ->
 			res = responses["#{method} #{uri}"]
+			headers = res.headers or {}
 			if res
 				resolve({
-					status: res.status,
-					headers: res.headers,
-					body: parse(res.body, res.headers["Content-Type"])
+					status: res.status
+					headers: headers
+					body: parse(res.body, headers["Content-Type"])
 				})
 			else
 				reject(status: 404, body: "#{uri} not found")

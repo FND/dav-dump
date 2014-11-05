@@ -6,7 +6,7 @@ describe("store", ->
 	it("should handle updates", (done) ->
 		store = new Store("/")
 		tid =
-			title: "sämple",
+			title: "sämple"
 			body: "lörem ipsüm"
 
 		store.add(tid).
@@ -32,7 +32,7 @@ describe("store", ->
 		store = new Store("/")
 		expected =
 			föü:
-				title: "föü",
+				title: "föü"
 				tags: ["aaa", "bbb"]
 				body: "lorem ipsum"
 			bäß:
