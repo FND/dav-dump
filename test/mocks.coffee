@@ -26,6 +26,9 @@ responses =
 			dolor
 			sit amet
 			"""
+	"PUT /s%C3%A4mple": # /sämple
+		status: 204
+		headers: {}
 
 util.http = (method, uri, headers, body) ->
 	new Promise((resolve, reject) ->
@@ -39,7 +42,7 @@ util.http = (method, uri, headers, body) ->
 				})
 			else
 				reject(status: 404, body: "#{uri} not found")
-		setTimeout(onResponse, 10)
+		setTimeout(onResponse, 1)
 		return)
 
 parse = (str, contentType) ->

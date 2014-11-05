@@ -3,13 +3,34 @@ Store = require("../src/store")
 require("./mocks")
 
 describe("store", ->
+	it("should handle updates", (done) ->
+		store = new Store("/")
+		tid =
+			title: "sämple",
+			body: "lörem ipsüm"
+
+		store.add(tid).
+			then((tids) ->
+				titles = Object.keys(tids).sort()
+				assert.deepEqual(titles, ["bäß", "föü", "sämple"])
+				assert.deepEqual(tids["sämple"].body, "lörem ipsüm")
+				return).
+			then(-> tid.body = "dolör sit ämet").
+			then(-> store.add(tid)). # explicit update via API
+			then((tids) ->
+				assert.deepEqual(tids["sämple"].body, "dolör sit ämet")
+				done()).
+			catch(done)
+
+		return)
+
 	it("should provide contents indexed by title", (done) ->
 		store = new Store("/")
 		expected =
 			föü:
 				title: "föü",
 				tags: ["aaa", "bbb"]
-				body:"lorem ipsum"
+				body: "lorem ipsum"
 			bäß:
 				title: "bäß"
 				priority: "high"

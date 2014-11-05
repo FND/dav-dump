@@ -11,19 +11,35 @@ http = util.http
 module.exports = class Store
 	# `root` is the base directory's URL
 	constructor: (@root) ->
+		@_cache = null
 		throw "missing root URL" if @root is undefined
 
+	# returns a promise for updated tids index (i.e. same as `#all`)
+	add: (tid) ->
+		put = http("PUT", @uri(tid.title), { "Content-Type": "text/plain" },
+				serializer.serialize(tid))
+		return Promise.all([put, @all()]).
+				then(([_, tids]) =>
+					@_cache[tid.title] = tid
+					tids[tid.title] = tid
+					return @_cache)
+
+	# `force` ensures a full update, discarding any existing cache
 	# returns a promise for tids indexed by title
-	all: -> # TODO: rename?
+	all: (force) -> # TODO: rename?
+		return Promise.resolve(@_cache) if @_cache and !force
+
 		return @index().then(([dirs, files]) =>
 			tids = (@get(title) for title in files)
 			return Promise.all(tids).
-				then((tids) -> util.indexBy("title", tids)))
+				then((tids) =>
+					@_cache = util.indexBy("title", tids)
+					return @_cache))
 
 	# returns a promise for the respective tid
 	get: (title) ->
 		return http("GET", @uri(title)).
-			then((res) => serializer.deserialize(title, res.body))
+			then((res) -> serializer.deserialize(title, res.body))
 
 	# returns a promise for a tuple of directories and files
 	index: ->
