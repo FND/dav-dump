@@ -15,7 +15,11 @@ describe("store", ->
 				assert.deepEqual(titles, ["bäß", "föü", "sämple"])
 				assert.deepEqual(tids["sämple"].body, "lörem ipsüm")
 				return).
-			then(-> tid.body = "dolör sit ämet").
+			then(-> tid.body = "dolör sit ämet"). # implicit update
+			then(-> store.all()).
+			then((tids) -> # ensure external immutability
+				assert.deepEqual(tids["sämple"].body, "lörem ipsüm")
+				return).
 			then(-> store.add(tid)). # explicit update via API
 			then((tids) ->
 				assert.deepEqual(tids["sämple"].body, "dolör sit ämet")

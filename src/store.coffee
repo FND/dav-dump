@@ -20,9 +20,9 @@ module.exports = class Store
 				serializer.serialize(tid))
 		return Promise.all([put, @all()]).
 				then(([_, tids]) =>
-					@_cache[tid.title] = tid
+					@_cache[tid.title] = util.clone(tid, true)
 					tids[tid.title] = tid
-					return @_cache)
+					return util.clone(@_cache, true))
 
 	# `force` ensures a full update, discarding any existing cache
 	# returns a promise for tids indexed by title
@@ -34,7 +34,7 @@ module.exports = class Store
 			return Promise.all(tids).
 				then((tids) =>
 					@_cache = util.indexBy("title", tids)
-					return @_cache))
+					return util.clone(@_cache, true)))
 
 	# returns a promise for the respective tid
 	get: (title) ->
