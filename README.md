@@ -10,3 +10,4 @@ Getting Started
 * `npm install` downloads third-party dependencies
 * `make test` runs the test suite
 * `make dev` activates background compilation
+* `make dist` creates the release file
