@@ -15,7 +15,7 @@ module.exports = class Store
 		throw "missing root URL" if @root is undefined
 
 	# returns a promise for updated tids index (i.e. same as `#all`)
-	add: (tid) ->
+	add: (tid) -> # XXX: subject to race conditions (conflicts)
 		put = http("PUT", @uri(tid.title), { "Content-Type": "text/plain" },
 				serializer.serialize(tid))
 		return Promise.all([put, @all()]).

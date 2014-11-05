@@ -9,14 +9,14 @@ responses =
 		headers:
 			"Content-Type": 'text/xml; charset="utf-8"'
 		body: getFixture("index.xml")
-	"GET /f%C3%B6%C3%BC": # /föü
+	"GET /f%C3%B6%C3%BC": # "föü"
 		status: 200
 		body: """
 			tags: [aaa, bbb]
 
 			lorem ipsum
 			"""
-	"GET /b%C3%A4%C3%9F": # /bäß
+	"GET /b%C3%A4%C3%9F": # "bäß"
 		status: 200
 		body: """
 			priority: high
@@ -24,7 +24,7 @@ responses =
 			dolor
 			sit amet
 			"""
-	"PUT /s%C3%A4mple": # /sämple
+	"PUT /s%C3%A4mple": # "sämple"
 		status: 204
 
 util.http = (method, uri, headers, body) ->
