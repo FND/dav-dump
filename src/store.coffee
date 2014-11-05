@@ -24,6 +24,14 @@ module.exports = class Store
 					tids[tid.title] = tid
 					return util.clone(@_cache, true))
 
+	remove: (title) ->
+		return http("DELETE", @uri(title))
+
+	# XXX: awkward signature; assumes tid is being moved between store instances
+	#      within the same WebDAV host (thus also not allowing for renaming)
+	move: (title, targetStore) ->
+		return http("MOVE", @uri(title), Destination: targetStore.uri(title))
+
 	# `force` ensures a full update, discarding any existing cache
 	# returns a promise for tids indexed by title
 	all: (force) -> # TODO: rename?
