@@ -1,9 +1,11 @@
-.PHONY: dev undev test compile
+.PHONY: dist dev undev test dist_dir
 
 export PATH := ./node_modules/.bin:$(PATH)
 
-dev: undev
-	mkdir -p dist # XXX: should not be necessary
+dist: dist_dir
+	`which gulp` browserify
+
+dev: undev dist_dir
 	mkdir -p tmp
 	`which gulp` autocompile & \
 		echo $$! > tmp/autocompile.pid
@@ -15,5 +17,6 @@ undev:
 test:
 	`which mocha` --compilers coffee:coffee-script/register
 
-compile:
-	`which gulp` browserify
+# XXX: should not be necessary (i.e. handled by the respective gulp tasks)
+dist_dir:
+	mkdir -p dist

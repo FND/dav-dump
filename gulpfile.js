@@ -6,7 +6,7 @@ var fs = require("fs");
 var path = require("path");
 
 var paths = {
-	csEntry: "src/main.coffee",
+	csEntry: "src/store.coffee",
 	distro: "dist",
 	js: "bundle.js"
 };
