@@ -12,14 +12,15 @@ var paths = {
 };
 
 var jsExtensions = [".coffee"];
+var jsExport = "Store";
 
 gulp.task("autocompile", function() {
 	browserify.watchify(paths.csEntry, path.join(paths.distro, paths.js),
-			jsExtensions);
+			jsExtensions, jsExport);
 });
 
 gulp.task("browserify", browserify(paths.csEntry,
-		path.join(paths.distro, paths.js), jsExtensions));
+		path.join(paths.distro, paths.js), jsExtensions, jsExport));
 
 // auto-install Git hooks
 fs.symlink("../../hooks/pre-push", "./.git/hooks/pre-push", function(err) {
