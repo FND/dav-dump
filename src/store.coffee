@@ -6,17 +6,16 @@ serializer = require("./serializer")
 xml = require("./xml")
 util = require("./util")
 
-http = util.http
-
 module.exports = class Store
 	# `root` is the base directory's URL
-	constructor: (@root) ->
+	# `http` is a function as described in the corresponding module
+	constructor: (@root, @http) ->
 		@_cache = null
 		throw "missing root URL" if @root is undefined
 
 	# returns a promise for updated tids index (i.e. same as `#all`)
 	add: (tid) -> # XXX: subject to race conditions (conflicts)
-		put = http("PUT", @uri(tid.title), { "Content-Type": "text/plain" },
+		put = @http("PUT", @uri(tid.title), { "Content-Type": "text/plain" },
 				serializer.serialize(tid))
 		return Promise.all([put, @all()]).
 				then(([_, tids]) =>
@@ -25,12 +24,12 @@ module.exports = class Store
 					return util.clone(@_cache, true))
 
 	remove: (title) ->
-		return http("DELETE", @uri(title))
+		return @http("DELETE", @uri(title))
 
 	# XXX: awkward signature; assumes tid is being moved between store instances
 	#      within the same WebDAV host (thus also not allowing for renaming)
 	move: (title, targetStore) ->
-		return http("MOVE", @uri(title), Destination: targetStore.uri(title))
+		return @http("MOVE", @uri(title), Destination: targetStore.uri(title))
 
 	# `force` ensures a full update, discarding any existing cache
 	# returns a promise for tids indexed by title
@@ -46,12 +45,12 @@ module.exports = class Store
 
 	# returns a promise for the respective tid
 	get: (title) ->
-		return http("GET", @uri(title)).
+		return @http("GET", @uri(title)).
 			then((res) -> serializer.deserialize(title, res.body))
 
 	# returns a promise for a tuple of directories and files
 	index: ->
-		return http("PROPFIND", @root, Depth: 1).
+		return @http("PROPFIND", @root, Depth: 1).
 			then((res) -> xml.extractEntries(res.body))
 
 	uri: (title) ->

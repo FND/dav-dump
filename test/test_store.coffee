@@ -1,10 +1,10 @@
 assert = require("assert")
 Store = require("../src/store")
-require("./mocks")
+http = require("./mocks").http
 
 describe("store", ->
 	it("should handle updates", (done) ->
-		store = new Store("/")
+		store = new Store("/", http)
 		tid =
 			title: "sämple"
 			body: "lörem ipsüm"
@@ -29,7 +29,7 @@ describe("store", ->
 		return)
 
 	it("should provide contents indexed by title", (done) ->
-		store = new Store("/")
+		store = new Store("/", http)
 		expected =
 			föü:
 				title: "föü"
@@ -47,7 +47,7 @@ describe("store", ->
 		return)
 
 	it("should retrieve individual tids", (done) ->
-		store = new Store("/")
+		store = new Store("/", http)
 		store.get("föü").
 			then((tid) ->
 				assert.deepEqual(tid.tags, ["aaa", "bbb"])
@@ -57,7 +57,7 @@ describe("store", ->
 		return)
 
 	it("should provide a directory index", (done) ->
-		store = new Store("/")
+		store = new Store("/", http)
 		store.index().
 			then(([dirs, files]) ->
 				assert.deepEqual(dirs, ["meta"])

@@ -1,6 +1,5 @@
 DOMParser = require("xmldom").DOMParser
 global.Promise = require("promiscuous") # TODO: use native implementation when available
-util = require("../src/util")
 getFixture = require("./util").getFixture
 
 responses =
@@ -27,7 +26,7 @@ responses =
 	"PUT /s%C3%A4mple": # "sämple"
 		status: 204
 
-util.http = (method, uri, headers, body) ->
+exports.http = (method, uri, headers, body) ->
 	new Promise((resolve, reject) ->
 		onResponse = ->
 			res = responses["#{method} #{uri}"]
