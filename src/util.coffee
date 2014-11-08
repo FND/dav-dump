@@ -5,9 +5,10 @@ exports.indexBy = (prop, items) ->
 		return memo
 	return items.reduce(reducer, {})
 
+# XXX: insufficiently generic
 exports.clone = (obj, deep) ->
-	return obj unless obj and typeof obj is "object"
+	return obj unless obj? or typeof obj isnt "object"
 
 	clone = {}
-	clone[key] = obj[key] for key of obj
+	clone[key] = value for own key, value of obj
 	return clone
