@@ -31,10 +31,10 @@ module.exports = class Store
 	move: (title, targetStore) ->
 		return @http("MOVE", @uri(title), Destination: targetStore.uri(title))
 
-	# `force` ensures a full update, discarding any existing cache
+	# `ignoreCache` triggers a full update, resetting the cache
 	# returns a promise for tids indexed by title
-	all: (force) -> # TODO: rename?
-		return Promise.resolve(@_cache) if @_cache and !force
+	all: (ignoreCache) -> # TODO: rename?
+		return Promise.resolve(@_cache) if @_cache and !ignoreCache
 
 		return @index().then(([dirs, files]) =>
 			tids = (@get(title) for title in files)
