@@ -18,9 +18,8 @@ module.exports = class Store
 		put = @http("PUT", @uri(tid.title), { "Content-Type": "text/plain" },
 				serializer.serialize(tid))
 		return Promise.all([put, @all()]).
-				then(([_, tids]) =>
+				then(=>
 					@_cache[tid.title] = util.clone(tid, true)
-					tids[tid.title] = tid
 					return util.clone(@_cache, true))
 
 	remove: (title) ->
