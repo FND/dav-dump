@@ -43,10 +43,18 @@ module.exports = class Store
 					@_cache = util.indexBy("title", tids)
 					return util.clone(@_cache, true)))
 
+	# `ignoreCache` triggers a full update, resetting the cache
 	# returns a promise for the respective tid
-	get: (title) ->
+	get: (title, ignoreCache) ->
+		if @_cache and !ignoreCache
+			tid = @_cache[title]
+			return Promise.resolve(tid) if tid
+
 		return @http("GET", @uri(title)).
-			then((res) -> serializer.deserialize(title, res.body))
+			then((res) ->
+				tid = serializer.deserialize(title, res.body)
+				@_cache[tid.title] = tid if @_cache
+				return  util.clone(tid, true))
 
 	# returns a promise for a tuple of directories and files
 	index: ->
