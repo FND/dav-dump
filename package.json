@@ -1,4 +1,6 @@
 {
+  "name": "dav-dump",
+  "version": "0.5.0",
   "browserify": {
     "transform": ["coffeeify"]
   },
