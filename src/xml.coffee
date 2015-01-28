@@ -1,6 +1,6 @@
 # utilities for handling WebDAV XML documents
 
-# extract file names from PROPFIND response
+# extracts directories and file names from PROPFIND response
 exports.extractEntries = (doc) ->
 	dirs = []
 	files = []
